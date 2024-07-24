@@ -1,0 +1,34 @@
+[
+    {
+        "label": "Search SNMP Trap log source bad keywords",
+        "duration": "24hour",
+        "query": "_lm.logsource_type=\"snmptrap\" and (\"error\" or \"fail\" or \"critical\" or \"fatal\" or \"terminate\" or \"kill\" or \"exception\" or \"timeout\")",
+        "UseCase": "",
+        "commentGroup": "SNMP Trap",
+        "commentQueryType": "Basic"
+    },
+    {
+        "label": "Search SNMP Trap log source good keywords",
+        "duration": "24hour",
+        "query": "_lm.logsource_type=\"snmptrap\"  and (\"success\" or \"complete\" or \"finish\")",
+        "UseCase": "",
+        "commentGroup": "SNMP Trap",
+        "commentQueryType": "Basic"
+    },
+    {
+        "label": "Aggregate for number of errors by day",
+        "duration": "24hour",
+        "query": "_lm.logsource_type=\"snmptrap\" and (\"error\" or \"fail\" or \"critical\" or \"fatal\" or \"terminate\" or \"kill\" or \"exception\" or \"timeout\") | bucket(span=24h) | count by _bucket | sort by _bucket desc",
+        "UseCase": "",
+        "commentGroup": "SNMP Trap",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Aggregate for number and type of informational Palo Alto traps received",
+        "duration": "24hour",
+        "query": "_lm.logsource_type=\"snmptrap\" AND panSystemSeverity = \"critical\" | count by  panSystemDescription | sort by _count desc | limit 15",
+        "UseCase": "Taking advantage of varbinds in the snmptrap datasource to write queries that do not require regex or need to parse",
+        "commentGroup": "SNMP Trap",
+        "commentQueryType": "Aggregate"
+    }
+]

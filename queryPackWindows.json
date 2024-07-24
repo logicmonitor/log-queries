@@ -1,0 +1,66 @@
+[
+    {
+        "label": "Windows Events Summary by Event Code with Channel, Event Type and Source",
+        "duration": "24hour",
+        "query": "_resource.group.name~\"Windows Servers\" | count by logfile, eventcode, eventtype, source | sort by _count desc",
+        "UseCase": "",
+        "commentGroup": "Windows",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Windows Log Volume by Channel in GB",
+        "duration": "24hour",
+        "query": "logfile~* AND _resource.group.name~\"Windows Servers\" | count(_size), sum(_size), max(_size), min(_size) by logfile | num(_sum/1000000000) as GB | num(_sum/_count) as avg_size | sort by GB desc",
+        "UseCase": "",
+        "commentGroup": "Windows",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Windows Security Account Name, Domain and Security ID Login Data",
+        "duration": "24hour",
+        "query": "_resource.group.name~\"Windows Servers\" AND \"Logon ID\" | parse /Security ID:\\t{1,}(.*[^\\r\\n])/ as security_id | parse /Account Name:\\t{1,}(.*[^\\r\\n])/ as account_name | parse /Account Domain:\\t{1,}(.*[^\\r\\n])/ as account_domain | parse /Logon ID:\\t{1,}(.*[^\\r\\n])/ as logon_id | count by _resource.name, security_id, account_name, logon_id, account_domain | sort by _count desc",
+        "UseCase": "",
+        "commentGroup": "Windows",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Windows Login Failures by User Resource IP EventType and Event Code",
+        "duration": "24hour",
+        "query": "_resource.group~\"Windows Servers\" AND /(?i)login failed/ | parse /for user '(.*?)'/ as user | parse /CLIENT: (.*?)]/ as ip | count by user, ip, _resource.name, eventtype,eventcode | sort by _count desc | limit 25",
+        "UseCase": "",
+        "commentGroup": "Windows",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Windows User Account Enabled, Disabled, Created - Event Codes",
+        "duration": "24hour",
+        "query": "eventcode=\"4720\" OR eventcode=\"4722\" OR eventcode=\"4725\"",
+        "UseCase": "",
+        "commentGroup": "Windows",
+        "commentQueryType": "Basic"
+    },
+    {
+        "label": "Windows User Account Modification to Privledged Group - Event Codes",
+        "duration": "24hour",
+        "query": "eventcode=\"4735\" OR eventcode=\"4737\" OR eventcode=\"4755\"",
+        "UseCase": "",
+        "commentGroup": "Windows",
+        "commentQueryType": "Basic"
+    },
+    {
+        "label": "Windows User Added to Privledged Group - Event Codes",
+        "duration": "24hour",
+        "query": "eventcode=\"4728\" OR eventcode=\"4732\" OR eventcode=\"4756\"",
+        "UseCase": "",
+        "commentGroup": "Windows",
+        "commentQueryType": "Basic"
+    },
+    {
+        "label": "Windows Account Logon or Lockout Failures - Event Codes",
+        "duration": "24hour",
+        "query": "eventcode=\"4625\" OR eventcode=\"4740\"",
+        "UseCase": "",
+        "commentGroup": "Windows",
+        "commentQueryType": "Basic"
+    }
+]

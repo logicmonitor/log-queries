@@ -1,0 +1,18 @@
+[
+    {
+        "label": "AWS Access Denied by ARN-eventName-Region",
+        "duration": "24hour",
+        "query": "_resource.group.name=\"AWS\" AND  \"accessdenied\"| parse /\"arn\":\"((.*?))\"/ as ARN | parse /\"eventSource\":\"((.*?))\"/ as eventSource | parse /\"eventName\":\"((.*?))\"/ as eventName | parse /\"awsRegion\":\"((.*?))\"/ as awsRegion | count by ARN,eventSource,eventName,awsRegion | sort by _count desc",
+        "UseCase": "",
+        "commentGroup": "AWS/CloudTrail",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "CloudTrail API Exceed and Throttling Issues by Code Message Name and Source",
+        "duration": "24hour",
+        "query": "_resource.group.name=\"AWS\"  and \"exceeded\" | parse /\"eventSource\":\"((.*?))\"/ as eventSource | parse /\"eventName\":\"((.*?))\"/ as eventName | parse /\"errorCode\":\"((.*?))\"/ as errorCode | parse /\"errorMessage\":\"((.*?))\"/ as errorMessage | parse /\"sourceIPAddress\":\"(([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3}))\"/ as sourceIPAdress | count by eventName,eventSource,errorMessage,errorCode,sourceIPAdress | sort by _count desc ",
+        "UseCase": "",
+        "commentGroup": "AWS/CloudTrail",
+        "commentQueryType": "Aggregate"
+    }
+]

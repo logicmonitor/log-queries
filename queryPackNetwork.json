@@ -1,0 +1,26 @@
+[
+    {
+        "label": "Network Syslog IPSEC or OpenVPN events",
+        "duration": "24hour",
+        "query": "_lm.logsource_type=\"syslog\" and (IPSEC or OpenVPN) | count by _resource.name | sort by _count desc",
+        "UseCase": "",
+        "commentGroup": "Network",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Network Syslog Duplex Mismatch or VLAN Mismatch",
+        "duration": "1hour",
+        "query": "_lm.logsource_type=\"syslog\" and (duplex or mismatch) | count by _resource.name | sort by _count desc",
+        "UseCase": "",
+        "commentGroup": "Network",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Network Bad Keywords",
+        "duration": "24hour",
+        "query": "_lm.logsource_type=\"syslog\" and (\"error\" or \"fail\" or \"critical\" or \"fatal\" or \"terminate\" or \"kill\" or \"exception\" or \"timeout\")",
+        "UseCase": "",
+        "commentGroup": "Network",
+        "commentQueryType": "Basic"
+    }
+]

@@ -1,0 +1,250 @@
+[
+    {
+        "label": "Bad Anomalies",
+        "duration": "24hour",
+        "query": "_anomaly.type=\"never_before_seen\" and (\"error\" or \"fail\" or \"critical\" or \"fatal\" or \"terminate\" or \"kill\" or \"exception\" or \"timeout\")",
+        "UseCase": "",
+        "commentGroup": "Anomaly",
+        "commentQueryType": "Basic"
+    },
+    {
+        "label": "Good Anomalies",
+        "duration": "24hour",
+        "query": "_anomaly.type=\"never_before_seen\" and (\"success\" or \"complete\" or \"finish\")",
+        "UseCase": "",
+        "commentGroup": "Anomaly",
+        "commentQueryType": "Basic"
+    },
+    {
+        "label": "Bad Keywords",
+        "duration": "24hour",
+        "query": "(\"error\" or \"fail\" or \"critical\" or \"fatal\" or \"terminate\" or \"kill\" or \"exception\" or \"timeout\")",
+        "UseCase": "",
+        "commentGroup": "Error Conditions",
+        "commentQueryType": "Basic"
+    },
+    {
+        "label": "Resources Sending Logs by Resource Name",
+        "duration": "24hour",
+        "query": "* | count by _resource.name | sort by _count desc",
+        "UseCase": "",
+        "commentGroup": "Volume/Usage",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Total Number of Resources Sending Logs",
+        "duration": "24hour",
+        "query": "* | count by _resource.name | count",
+        "UseCase": "",
+        "commentGroup": "Volume/Usage",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Top 25 Resources by Volume",
+        "duration": "24hour",
+        "query": "* | count(_size), sum(_size) by _resource.name | sort by _sum desc | limit 25",
+        "UseCase": "",
+        "commentGroup": "Volume/Usage",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Top 25 Resource Groups by Volume",
+        "duration": "24hour",
+        "query": " * | count(_size), sum(_size) by _resource.group | sort by _sum desc | limit 25",
+        "UseCase": "",
+        "commentGroup": "Volume/Usage",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Total Volume by Resource Name as GB and average, min, max size per message",
+        "duration": "24hour",
+        "query": "* | count(_size), sum(_size), max(_size), min(_size) by _resource.name | num(_sum/1000000000) as GB | num(_sum/_count) as avg_size | sort by GB desc",
+        "UseCase": "",
+        "commentGroup": "Volume/Usage",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Events Per Sec over 7 Day Time Span by Resource Name as GB and average message size",
+        "duration": "7days",
+        "query": "* | count(_size), sum(_size) by _resource.name | num(_sum/1000000000) as GB | num(_sum/_count) as avg_size | num(_count/604800) as EPS | sort by EPS desc",
+        "UseCase": "",
+        "commentGroup": "Volume/Usage",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Daily Usage in 24 Hour Buckets",
+        "duration": "7days",
+        "query": "* | bucket(span=24h) | sum (_size) as size_in_bytes by_bucket | num(size_in_bytes/1000000000) as GB | sort by _bucket asc",
+        "UseCase": "",
+        "commentGroup": "Volume/Usage",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Top 10 Reoccuring Messages",
+        "duration": "24hour",
+        "query": "* | count by _message | sort by _count desc | limit 10",
+        "UseCase": "",
+        "commentGroup": "Volume/Usage",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Deviceless/Unmapped Logs",
+        "duration": "24hour",
+        "query": "_resource.id=\"0\"",
+        "UseCase": "",
+        "commentGroup": "Deviceless Logs",
+        "commentQueryType": "Basic"
+    },
+    {
+        "label": "Deviceless Logs Parsed Hostname if a Hostname is the First Value After Timestamp",
+        "duration": "24hour",
+        "query": "_resource.id=\"0\" | parse /[0-9]{2}:[0-9]{2}:[0-9]{2} (\\S+)/ as unmap_host | count by unmap_host | sort by _count desc",
+        "UseCase": "",
+        "commentGroup": "Deviceless Logs",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Login Failures",
+        "duration": "24hour",
+        "query": "(login or logon) and (fail or mismatch)| count by _resource.name | sort by _count desc",
+        "UseCase": "",
+        "commentGroup": "Logins",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Network Syslog IPSEC or OpenVPN events",
+        "duration": "24hour",
+        "query": "_lm.logsource_type=\"syslog\" and (IPSEC or OpenVPN) | count by _resource.name | sort by _count desc",
+        "UseCase": "",
+        "commentGroup": "Network",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Network Syslog Duplex Mismatch or VLAN Mismatch",
+        "duration": "1hour",
+        "query": "_lm.logsource_type=\"syslog\" and (duplex or mismatch) | count by _resource.name | sort by _count desc",
+        "UseCase": "",
+        "commentGroup": "Network",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Network Bad Keywords",
+        "duration": "24hour",
+        "query": "_lm.logsource_type=\"syslog\" and (\"error\" or \"fail\" or \"critical\" or \"fatal\" or \"terminate\" or \"kill\" or \"exception\" or \"timeout\")",
+        "UseCase": "",
+        "commentGroup": "Network",
+        "commentQueryType": "Basic"
+    },
+    {
+        "label": "Search SNMP Trap log source bad keywords",
+        "duration": "24hour",
+        "query": "_lm.logsource_type=\"snmptrap\" and (\"error\" or \"fail\" or \"critical\" or \"fatal\" or \"terminate\" or \"kill\" or \"exception\" or \"timeout\")",
+        "UseCase": "",
+        "commentGroup": "SNMP Trap",
+        "commentQueryType": "Basic"
+    },
+    {
+        "label": "Search SNMP Trap log source good keywords",
+        "duration": "24hour",
+        "query": "_lm.logsource_type=\"snmptrap\"  and (\"success\" or \"complete\" or \"finish\")",
+        "UseCase": "",
+        "commentGroup": "SNMP Trap",
+        "commentQueryType": "Basic"
+    },
+    {
+        "label": "Aggregate for number of errors by day",
+        "duration": "24hour",
+        "query": "_lm.logsource_type=\"snmptrap\" and (\"error\" or \"fail\" or \"critical\" or \"fatal\" or \"terminate\" or \"kill\" or \"exception\" or \"timeout\") | bucket(span=24h) | count by _bucket | sort by _bucket desc",
+        "UseCase": "",
+        "commentGroup": "SNMP Trap",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Aggregate for number and type of informational Palo Alto traps received",
+        "duration": "24hour",
+        "query": "_lm.logsource_type=\"snmptrap\" AND panSystemSeverity = \"critical\" | count by  panSystemDescription | sort by _count desc | limit 15",
+        "UseCase": "Taking advantage of varbinds in the snmptrap datasource to write queries that do not require regex or need to parse",
+        "commentGroup": "SNMP Trap",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Windows Events Summary by Event Code with Channel, Event Type and Source",
+        "duration": "24hour",
+        "query": "_resource.group.name~\"Windows Servers\" | count by logfile, eventcode, eventtype, source | sort by _count desc",
+        "UseCase": "",
+        "commentGroup": "Windows",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Windows Log Volume by Channel in GB",
+        "duration": "24hour",
+        "query": "logfile~* AND _resource.group.name~\"Windows Servers\" | count(_size), sum(_size), max(_size), min(_size) by logfile | num(_sum/1000000000) as GB | num(_sum/_count) as avg_size | sort by GB desc",
+        "UseCase": "",
+        "commentGroup": "Windows",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Windows Security Account Name, Domain and Security ID Login Data",
+        "duration": "24hour",
+        "query": "_resource.group.name~\"Windows Servers\" AND \"Logon ID\" | parse /Security ID:\\t{1,}(.*[^\\r\\n])/ as security_id | parse /Account Name:\\t{1,}(.*[^\\r\\n])/ as account_name | parse /Account Domain:\\t{1,}(.*[^\\r\\n])/ as account_domain | parse /Logon ID:\\t{1,}(.*[^\\r\\n])/ as logon_id | count by _resource.name, security_id, account_name, logon_id, account_domain | sort by _count desc",
+        "UseCase": "",
+        "commentGroup": "Windows",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Windows Login Failures by User Resource IP EventType and Event Code",
+        "duration": "24hour",
+        "query": "_resource.group~\"Windows Servers\" AND /(?i)login failed/ | parse /for user '(.*?)'/ as user | parse /CLIENT: (.*?)]/ as ip | count by user, ip, _resource.name, eventtype,eventcode | sort by _count desc | limit 25",
+        "UseCase": "",
+        "commentGroup": "Windows",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "Windows User Account Enabled, Disabled, Created - Event Codes",
+        "duration": "24hour",
+        "query": "eventcode=\"4720\" OR eventcode=\"4722\" OR eventcode=\"4725\"",
+        "UseCase": "",
+        "commentGroup": "Windows",
+        "commentQueryType": "Basic"
+    },
+    {
+        "label": "Windows User Account Modification to Privledged Group - Event Codes",
+        "duration": "24hour",
+        "query": "eventcode=\"4735\" OR eventcode=\"4737\" OR eventcode=\"4755\"",
+        "UseCase": "",
+        "commentGroup": "Windows",
+        "commentQueryType": "Basic"
+    },
+    {
+        "label": "Windows User Added to Privledged Group - Event Codes",
+        "duration": "24hour",
+        "query": "eventcode=\"4728\" OR eventcode=\"4732\" OR eventcode=\"4756\"",
+        "UseCase": "",
+        "commentGroup": "Windows",
+        "commentQueryType": "Basic"
+    },
+    {
+        "label": "Windows Account Logon or Lockout Failures - Event Codes",
+        "duration": "24hour",
+        "query": "eventcode=\"4625\" OR eventcode=\"4740\"",
+        "UseCase": "",
+        "commentGroup": "Windows",
+        "commentQueryType": "Basic"
+    },
+    {
+        "label": "AWS Access Denied by ARN-eventName-Region",
+        "duration": "24hour",
+        "query": "_resource.group.name=\"AWS\" AND  \"accessdenied\"| parse /\"arn\":\"((.*?))\"/ as ARN | parse /\"eventSource\":\"((.*?))\"/ as eventSource | parse /\"eventName\":\"((.*?))\"/ as eventName | parse /\"awsRegion\":\"((.*?))\"/ as awsRegion | count by ARN,eventSource,eventName,awsRegion | sort by _count desc",
+        "UseCase": "",
+        "commentGroup": "AWS/CloudTrail",
+        "commentQueryType": "Aggregate"
+    },
+    {
+        "label": "CloudTrail API Exceed and Throttling Issues by Code Message Name and Source",
+        "duration": "24hour",
+        "query": "_resource.group.name=\"AWS\"  and \"exceeded\" | parse /\"eventSource\":\"((.*?))\"/ as eventSource | parse /\"eventName\":\"((.*?))\"/ as eventName | parse /\"errorCode\":\"((.*?))\"/ as errorCode | parse /\"errorMessage\":\"((.*?))\"/ as errorMessage | parse /\"sourceIPAddress\":\"(([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3}))\"/ as sourceIPAdress | count by eventName,eventSource,errorMessage,errorCode,sourceIPAdress | sort by _count desc ",
+        "UseCase": "",
+        "commentGroup": "AWS/CloudTrail",
+        "commentQueryType": "Aggregate"
+    }
+]
